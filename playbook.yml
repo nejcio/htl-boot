@@ -21,7 +21,7 @@
           - php5-mcrypt
       - name: install git
         apt: name=git state=present
-      - name: install composer
+      - name: install Composer
         shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
         args:
           creates: /usr/local/bin/composer
@@ -36,6 +36,9 @@
         composer: command=create-project working_dir=/vagrant/site optimize_autoloader=no
         sudo: yes
         when: cloned|changed
+      - name: composer update
+        shell: ( cd /vagrant/site/ && composer update)
+        sudo: yes
       - name: Copy across new virtual host
         template:
           src=virtual-hosts.conf.j2
